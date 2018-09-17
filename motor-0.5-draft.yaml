@@ -1,0 +1,325 @@
+openapi: 3.0.1
+info:
+  title: 'Motor Insurance Products'
+  version: '0.5-draft'
+  description: 'This specification includes all relevant artefacts for Motor Insurance Products API Specification. In Malaysia, product aggregators have to obtain product information on cards through either web scraping or entering into exclusive arrangement with the financial institutions. Through standardized API, third parties including fintech companies are able to develop solutions which target retail consumers.'
+  contact:
+    name: 'BNM Open API Team'
+    email: 'oapi@bnm.gov.my'
+servers:
+  - url: 'https://api.sample.com'
+    description: 'Production server URL'
+  - url: 'https://api.test.sample.com'
+    description: 'Staging server URL'
+paths:
+  /sme:
+    get:
+      tags:
+        - 'Endpoint for getting Motor Insurance product details'
+      summary: 'Retrieve the detail of Motor Insurance products'
+      description: 'This API endpoint will return all Motor Insurance products offered by the insurance company or takaful operator'
+      operationId: getProducts
+      responses:
+        '200':
+          description: 'Successful response'
+          content:
+            application/json:
+              schema:
+                title: Sample
+                type: object
+                properties:
+                  meta:
+                    type: object
+                    properties:
+                      last_updated:
+                        type: string
+                        description: 'Last updated date of product list'
+                        example: '2018-09-17T17:30:12.345+08:00'
+                      version:
+                        type: string
+                        description: 'API version'
+                        example: '0.1-dev'
+                      total_result:
+                        type: string
+                        description: 'Number of products returned'
+                        example: 3
+                  providers:
+                    type: object
+                    properties:
+                      name:
+                        type: string
+                        description: 'Insurance company or takaful operator name'
+                        example: 'Etiqa General Insurance Berhad'
+                      identifier:
+                        type: string
+                        description: 'Acronym of provider'
+                        maximum: 4
+                        example: 'EGIB'
+                      agreement:
+                        type: string
+                        enum:
+                          - ['Use of the APIs and any related data will be subject to terms and conditions']
+                      term_of_use:
+                        type: string
+                        description: 'URL for Terms and Condition'
+                        example: 'http://etiqa.com.my/en/privacy-policy'
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        product_details:
+                          type: object
+                          required:
+                            - name
+                          properties:
+                            name:
+                              type: string
+                              description: 'Product name'
+                              maximum: 100
+                              example: 'Motor Comprehensive Insurance'
+                            issuer:
+                              type: string
+                              maximum: 100
+                              description: 'Issuer'
+                            underwriter:
+                              type: string
+                              maximum: 100
+                              description: 'Underwriter'
+                            summary:
+                              type: string
+                              maximum: 150
+                              description: 'Summary of product description'
+                            description:
+                              type: string
+                              description: 'Product descrption'
+                            shariah_compliance:
+                              type: string
+                              enum:
+                                - 'Y'
+                                - 'N'
+                              maximum: 1
+                              description: 'The indicator for Islamic or Conventional product'
+                              example: 'Y'
+                            vehicle_type:
+                              type: array
+                              items:
+                                type: string
+                                example: ['Private', 'Commercial', 'Motorcycles']
+                            cover_type:
+                              type: integer
+                              enum:
+                                - 1
+                                - 2
+                                - 3
+                              description: 'Type of cover. Acceptable values: 1 = Comprehensive, 2 = Third party, 3 = Third party - fire and theft'
+                            hotline_support:
+                              type: object
+                              properties:
+                                operator:
+                                  type: number
+                                  description: 'Insurance customer service hotline'
+                                  example: 1300881028
+                                road_assistance:
+                                  type: number
+                                  description: 'Road side assistance Hotline'
+                                  example: 1800886278
+                                claim_assistance:
+                                  type: number
+                                  description: 'Claim assistance hotline'
+                                  example: 1300881028
+                                24h_assistance:
+                                  type: number
+                                  description: '24 hours roadside breakdown assistance'
+                                  example: 1800886278
+                                24h_towing:
+                                  type: number
+                                  description: '24 hours towing service'
+                                  example: 1800886278
+                                alternative_travel:
+                                  type: number
+                                  description: 'Alternative travel assistance'
+                                live_chat:
+                                  type: string
+                                  description : 'URL to 24/7 Live Chat Support'
+                                email:
+                                  type: string
+                                  format: email
+                                  description: 'Email Address to Support'  
+                            online_purchase:
+                              type: object
+                              properties:
+                                portal_flag:
+                                  type: string
+                                  maximum: 1
+                                  enum: 
+                                    - 'Y'
+                                    - 'N'
+                                  description: 'Online purchase portal availability'
+                                portal_url:
+                                  type: string
+                                  format: uri
+                                  description: 'Online portal link'
+                                  example: 'https://getquote.allianz.com.my'
+                                payment_options:
+                                  type: array
+                                  items:
+                                    type: string
+                                    description: 'Online purchase payment options'
+                                    example: ['FPX', 'Online Banking']
+                            min_sum_insured:
+                              type: number
+                              description: 'Minimum sum insured in MYR'
+                              example: 10000
+                            max_sum_insured:
+                              type: number
+                              description: 'Maximum sum insured in MYR'
+                              example: 350000
+                            epp:
+                              type: object
+                              properties:
+                                bank_name: 
+                                  type: string
+                                  maximum: 100
+                                  description: 'Bank EPP name'
+                                issuer:
+                                  type: string
+                                  maximum: 100
+                                  description: 'Bank of issuance'
+                                repayment_period:
+                                  type: array
+                                  description: 'Repayment period in month'
+                                  items:
+                                    type: number
+                                    example: [6, 12, 18, 24]
+                                min_amount:
+                                  type: number
+                                  description: 'Minimum repayment amount in MYR'
+                                max_amount:
+                                  type: number
+                                  description: 'Maximum repayment amount in MYR'
+                            insured_drivers:
+                              type: object
+                              properties:
+                                max_drivers:
+                                  type: number
+                                  description: 'Maximum number of insured drivers'
+                                max_free_drivers:
+                                  type: number
+                                  description: 'Maximum free insured drivers'
+                                additional_driver_charges:
+                                  type: number
+                                  description: 'Additional driver charges in MYR'
+                            excess:
+                              type: object
+                              properties:
+                                min_claim:
+                                  type: number
+                                  description: 'Minimum claim excess in MYR'
+                                max_claim:
+                                  type: number
+                                  description: 'Maximum claim excess in MYR'
+                                conditions:
+                                  type: object
+                                  properties:
+                                    below_age:
+                                      type: boolean
+                                      description: 'Excess needed for below 21 years old'
+                                    license_L:
+                                      type: boolean
+                                      description: 'Excess needed for L license holder'
+                                    license_P:
+                                      type: boolean
+                                      description: 'Excess needed for P license holder'
+                                    unnamed_driver:
+                                      type: boolean
+                                      description: 'Excess for unnamed driver'
+                            no_claim_bonus:
+                              type: number
+                              description: 'Percentage of discount for no claim bonus'
+                              minimum: 0
+                              maximum: 100
+                            no_claim_bonus_desc:
+                              type: string
+                              description: 'No claim bonus description'
+                            friend_family_assist:
+                              type: boolean
+                              description: 'Friends and Family Assistance. For breakdowns, towing, accident etc. When insured friends and family are using Policy Holder vehicle.'
+                            towing:
+                              type: object
+                              properties:
+                                free_max_km:
+                                  type: number
+                                  description: 'Maximum KM for free towing'
+                                max_amount:
+                                  type: number
+                                  description: 'Maximum amount for free towing in MYR'
+                                additional_charges:
+                                  type: number
+                                  description: 'Additional charges for towing'
+                                additional_charges_notes:
+                                  type: string
+                                  description: 'Notes for additional charges'
+                                  example: 'Charges applied per KM'
+                            extended_coverage:
+                              type: boolean
+                              description: 'Coverage outside of Malaysia'
+                            extended_coverage_notes:
+                              type: string
+                              description: 'Notes for extended coverage'
+                              example: 'Standard coverage cover for SG & Brunei. Coverage can be extended to Thailand and Kalimatan with additional premium'
+                            coverage_benefits:
+                              type: object
+                              properties:
+                                coverage_detail:
+                                  type: array
+                                  items:
+                                    type: object
+                                    properties:
+                                      coverage_type:
+                                        type: string
+                                        enum:
+                                          - 'Bodily Injury'
+                                          - 'Damage Own Vehicle'
+                                          - 'Damage of Property'
+                                          - 'Legal Costs'
+                                          - 'Windscreen'
+                                          - 'Car Accessories'
+                                          - 'Special Perils'
+                                          - 'Strike, Riot, and Civil Commotion'
+                                          - 'Legal Liability to Passenger'
+                                          - 'Legal Liability of Passenger'
+                                          - 'Compassionate Flood Expense'
+                                          - 'Accidental Death'
+                                          - 'Warranty for Worksmanship'
+                                        description: 'Type of coverage or benefits'
+                                      code:
+                                        type: string
+                                        description: 'ISM code for coverage'
+                                      covered_flag:
+                                        type: boolean
+                                        description: 'Indicator of coverage being offered'
+                                      optional_benefit:
+                                        type: boolean
+                                        description: 'Indicator of standard or optional benefit'
+                                      amount:
+                                        type: number
+                                        description: 'Maximum coverage amount in MYR'
+                                      notes:
+                                        type: string
+                                        description: 'Additional notes to further describe coverage'
+                            pds_url:
+                              type: string
+                              description: 'URL for Product Disclosure Sheet' 
+                              example: 'https://www.allianz.com.my/car-motor-comprehensive-cover'
+                            tnc_url:
+                              type: string
+                              description: 'URL for Terms and Condition'
+                              example: 'https://www.allianz.com.my/car-motor-comprehensive-cover'
+
+        '404':
+          description: 404 Product not found
+        '500':
+          description: 500 Internal server error
+        '504':
+          description: 504 Gateway timeout
